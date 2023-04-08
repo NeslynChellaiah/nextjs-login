@@ -1,0 +1,83 @@
+.banner {
+  background-color: #5c5fef;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.banner-content {
+  padding: 5rem;
+  z-index: 100;
+  width: 31.25rem;
+}
+
+.banner-content-description {
+  margin-top: 7rem;
+}
+
+.banner-content-description-bold {
+  margin-block: 1rem;
+}
+
+.skills {
+  margin-bottom: 1rem;
+}
+
+.skill-badge {
+  font-size: 0.8rem;
+  border: 0.063rem solid white;
+  padding: 0.25rem 0.4rem;
+  margin-right: 0.5rem;
+  border-radius: 1rem;
+}
+
+.form-container {
+  background-color: #1c1d21;
+  padding: 3.5rem !important;
+}
+
+.company-name {
+  margin-bottom: 2rem;
+}
+
+form {
+  width: 100%;
+}
+
+label {
+  color: #b2b2b2 !important;
+  margin-block: 0.5rem !important;
+}
+
+.submit-btn {
+  background-color: #5c5fef !important;
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.btn:disabled {
+  border: none !important;
+}
+
+.circle {
+  box-shadow: rgba(88, 88, 91, 0.2) 0px 7px 29px 0px;
+}
+
+.circle-1 {
+  height: 120vh;
+  width: 120vh;
+  margin-left: 50%;
+  transform: translateY(-10vh);
+  background-color: #6061ef;
+}
+
+.circle-2 {
+  height: 80vh;
+  width: 80vh;
+  background-color: #6667f0;
+}
+
+.circle-3 {
+  background-color: #7777f1;
+  height: 40vh;
+  width: 40vh;
+}

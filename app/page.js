@@ -1,102 +1,132 @@
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-import styles from './page.module.css'
+"use client";
 
-const inter = Inter({ subsets: ['latin'] })
+import { useEffect, useState } from "react";
 
-export default function Home() {
+import "./tablePage.css";
+
+export default function Dashboard() {
+  const [tableData, setTableData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [headers, setHeaders] = useState([
+    {
+      label: "First Name",
+      property: "first_name",
+      ascendingOrder: false,
+    },
+    {
+      label: "Last Name",
+      property: "last_name",
+      ascendingOrder: false,
+    },
+    {
+      label: "Gender",
+      property: "gender",
+      ascendingOrder: false,
+    },
+    {
+      label: "@ Email",
+      property: "email",
+      ascendingOrder: false,
+    },
+  ]);
+  useEffect(() => {
+    fetch("https://frontendtestapi.staging.fastjobs.io/data", {
+      method: "GET",
+      credentials: "include",
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((tableDataArr) => {
+        setTableData(tableDataArr);
+        setFilteredData(tableDataArr);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  const handleSearch = (e) => {
+    const searchString = e.target.value;
+    if (!searchString.trim() && filteredData.length != tableData.length) {
+      setFilteredData(tableData);
+    } else if (searchString.trim()) {
+      setFilteredData(
+        tableData.filter(
+          (data) =>
+            data.first_name
+              .toLowerCase()
+              .includes(searchString.toLowerCase()) ||
+            data.last_name.toLowerCase().includes(searchString.toLowerCase())
+        )
+      );
+    }
+  };
+
+  const sort = (i) => {
+    const isAscending = !headers[i].ascendingOrder;
+    const sortKey = headers[i].property;
+    headers[i].ascendingOrder = isAscending;
+    const sortedArr = filteredData.sort((a, b) => {
+      const aValue = a[sortKey];
+      const bValue = b[sortKey];
+      if (aValue < bValue) {
+        return isAscending ? -1 : 1;
+      }
+      if (aValue > bValue) {
+        return isAscending ? 1 : -1;
+      }
+      return 0;
+    });
+    setFilteredData([...sortedArr]);
+  };
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
+    <div className="table-container">
+      {filteredData.length ? (
+        <>
+          <div className="d-flex justify-content-end">
+            <input
+              type="text"
+              className="form-control search-box"
+              placeholder="Type to search"
+              onChange={handleSearch}
             />
-          </a>
-        </div>
-      </div>
+          </div>
+          <table className="table table-striped">
+            <thead>
+              <tr>
+                {headers.map((header, i) => {
+                  return (
+                    <th
+                      key={header.property}
+                      scope="col"
+                      onClick={() => sort(i)}
+                    >
+                      {header.label}
+                    </th>
+                  );
+                })}
+              </tr>
+            </thead>
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://beta.nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+            <tbody>
+              {filteredData.map((tableRow) => {
+                return (
+                  <tr key={tableRow.id}>
+                    <td className="font-bold">{tableRow.first_name}</td>
+                    <td className="font-bold">{tableRow.last_name}</td>
+                    <td>{tableRow.gender}</td>
+                    <td className="font-light">{tableRow.email}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </>
+      ) : (
+        <div className="d-flex justify-content-center">Loading...</div>
+      )}
+    </div>
+  );
 }

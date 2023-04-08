@@ -1,0 +1,20 @@
+.table-container {
+  padding: 3rem;
+}
+
+.search-box {
+  max-width: 15rem !important;
+  margin-bottom: 0.5rem;
+}
+
+.font-bold {
+  font-weight: 500;
+}
+
+.font-light {
+  font-weight: 200;
+}
+
+th {
+  cursor: pointer !important;
+}
