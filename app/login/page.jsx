@@ -31,6 +31,7 @@ export default function Login() {
       .then((json) => {
         if (json.message !== "success") {
           setIsCredentialsWrong(true);
+          setTimeout(() => setIsCredentialsWrong(false), 3000);
           return;
         }
         router.push("/");
@@ -67,7 +68,16 @@ export default function Login() {
           </div>
         </div>
       </div>
-      <div className="form-container min-vh-100 col-sm-4 col-xs-12 d-flex flex-column justify-content-center align-items-center">
+      <div className="form-container min-vh-100 col-sm-4 col-xs-12 d-flex flex-column justify-content-center align-items-center position-relative">
+        {isCredentialsWrong && (
+          <div
+            onClick={() => setIsCredentialsWrong(false)}
+            className="position-absolute text-light d-inline-block small-toast row"
+          >
+            <small>Wrong login credentials please try again</small>
+          </div>
+        )}
+
         <h1 className="text-light d-sm-none company-name">Fastjobs.io</h1>
         <h3 className="text-light">For us to stay in touch</h3>
         <form onSubmit={login}>
@@ -95,11 +105,6 @@ export default function Login() {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          {isCredentialsWrong && (
-            <small className="text-danger">
-              Wrong login credentials please try again
-            </small>
-          )}
           <button
             type="submit"
             className="btn text-light submit-btn"

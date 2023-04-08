@@ -81,3 +81,12 @@ label {
   height: 40vh;
   width: 40vh;
 }
+
+.small-toast {
+  top: 2rem;
+  right: 2rem;
+  background-color: #7777f1;
+  cursor: pointer;
+  border-radius: 0.75rem;
+  padding: 0.5rem;
+}

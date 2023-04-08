@@ -3,8 +3,10 @@
 import { useEffect, useState } from "react";
 
 import "./tablePage.css";
+import { useRouter } from "next/navigation";
 
 export default function Dashboard() {
+  const router = useRouter();
   const [tableData, setTableData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [headers, setHeaders] = useState([
@@ -29,7 +31,8 @@ export default function Dashboard() {
       ascendingOrder: false,
     },
   ]);
-  useEffect(() => {
+
+  const fetchData = () => {
     fetch("https://frontendtestapi.staging.fastjobs.io/data", {
       method: "GET",
       credentials: "include",
@@ -40,6 +43,24 @@ export default function Dashboard() {
       .then((tableDataArr) => {
         setTableData(tableDataArr);
         setFilteredData(tableDataArr);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  useEffect(() => {
+    fetch("https://frontendtestapi.staging.fastjobs.io/auth/me", {
+      method: "GET",
+      credentials: "include",
+    })
+      .then((response) => response.json())
+      .then((resp) => {
+        if (resp.statusCode === 401) {
+          router.push("/login");
+          return;
+        }
+        fetchData();
       })
       .catch((error) => {
         console.error(error);
