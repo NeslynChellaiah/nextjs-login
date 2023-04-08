@@ -59,7 +59,7 @@ export default function Login() {
                 );
               })}
             </div>
-            <h6>Don't be nervous.</h6>
+            <h6>Don&#39;t be nervous.</h6>
           </div>
         </div>
         <div className="circle d-inline-block rounded-circle circle-1 position-absolute d-flex align-items-center justify-content-center">
